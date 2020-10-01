@@ -12,6 +12,7 @@ npm install -g @angular/cli
 [Download](https://github.com/mravn/gnosis-frontend-interview/archive/master.zip)
 the repository to begin. Then run
 ```
+npm install
 ng serve
 ```
 from the repository root and navigate your browser to
