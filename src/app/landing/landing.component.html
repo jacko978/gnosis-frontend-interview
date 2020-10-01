@@ -1,0 +1,252 @@
+<div class="container">
+  <h1>
+    Welcome to the Gnosis interview challenge
+  </h1>
+  <p>
+    Please relax. This is not a brain teaser, no trick questions, no traps. Our
+    goal in asking you to complete the challenge is to get an indication on how
+    you work on everyday tasks.
+  </p>
+  <p>
+    Complete the challenge in your own time, taking as much time as you need.
+    Once you are ready, zip your project source code (the stuff you would put
+    in version control) and send it to me. Please don't put your solution
+    anywhere public, like a public GitHub repository.
+  </p>
+  <p>
+    We will evaluate your solution based on
+    <strong>correctness and simplicity</strong>. At Gnosis, we want code that we
+    can build a business on. The software needs to work, obviously, but
+    correctness is not enough to ensure success. Our requirements change all the
+    time, so we need code that is easy to read, understand, and modify by
+    coworkers. Or yourself, six months from now.
+  </p>
+  <p>
+    Your solution will <strong>not</strong> be evaluated on UI design as such,
+    but please strive for consistency and cleanliness. Attention to details
+    matter at Gnosis. For this challenge, a consistent and simple UI is much
+    preferred over inconsistent eye candy with fancy animations.
+  </p>
+  <p>
+    If we like your solution, I will invite you to a follow-up chat where you
+    will be asked to explain your solution and make some changes as we speak.
+    Again, no tricks &mdash; we'll strive to emulate daily interaction between
+    coworkers, because that is where we need you to shine after we hire you.
+  </p>
+
+  <p>
+    If you have any questions, shoot me an email. I'll answer as quickly as I
+    can.
+  </p>
+  <p>
+    Happy working!<br />
+    <br />
+    Mikkel Ravn<br />
+    VP Engineering<br />
+    <a href="mailto:mravn@gnosisda.com">mravn@gnosisda.com</a><br />
+  </p>
+
+  <h2>Requirements</h2>
+
+  <ul>
+    <li>
+      Add a navigation button anywhere on this page. Clicking it should lead the user to
+      a pricing page.
+    </li>
+    <li>
+      The pricing page should show the pricing options for JADBIO subscription
+      products based on an HTTPS query to a backend service to fetch the
+      available products.
+    </li>
+    <li>
+      The pricing page should let the user indicate whether they represent an
+      academic or a commercial customer.
+    </li>
+    <li>
+      The pricing page should let the user choose between the available
+      products. Product names and lists of features should be shown to help the
+      user choose.
+    </li>
+    <li>
+      The pricing page should let the user choose between available billing
+      intervals (e.g. monthly or yearly).
+    </li>
+    <li>
+      If the chosen product supports group subscriptions, the pricing page
+      should let the user choose the number of seats (1 to 20). Otherwise, one
+      seat is implied.
+    </li>
+    <li>
+      The pricing page should show the user the currency and total amount to pay
+      when creating or renewing the subscription.
+    </li>
+    <li>
+      The pricing page should allow the user to change their mind on any of the
+      above and dynamically update the price shown.
+    </li>
+  </ul>
+
+  <h2>Implementation details</h2>
+
+  <p>
+    The backed service is available at the following URL:
+  </p>
+  <p>
+    <a href="https://jadapi.jadbio.com/api/subscription/products"
+    >https://jadapi.jadbio.com/api/subscription/products</a
+    >
+  </p>
+  <p>
+    The endpoint returns a JSON array containing one entry per Product, see
+    below.
+  </p>
+
+  <h3>Product</h3>
+  Something you can subscribe to. Fields:
+  <dl>
+    <dt>id</dt>
+    <dd>
+      A string identifying the Product.
+    </dd>
+    <dt>name</dt>
+    <dd>
+      The human-readable name of the Product.
+    </dd>
+    <dt>features</dt>
+    <dd>
+      An array of Feature objects.
+    </dd>
+    <dt>pricing</dt>
+    <dd>
+      A Pricing object.
+    </dd>
+  </dl>
+
+  <h3>Feature</h3>
+  Something a Product can do that you might want to pay for. Fields:
+  <dl>
+    <dt>id</dt>
+    <dd>
+      An string identifying the Feature.
+    </dd>
+    <dt>name</dt>
+    <dd>
+      The human-readable name of the Feature.
+    </dd>
+  </dl>
+
+  <h3>Pricing</h3>
+  A representation of the subscription plans available for a Product. In the
+  field descriptions below, <i>n</i> refers to the number of available plans.
+  All arrays in the Product fields have length <i>n</i>.
+  <dl>
+    <dt>currency</dt>
+    <dd>
+      An ISO 4217 currency code string, like EUR or USD
+    </dd>
+    <dt>academic_plan_ids</dt>
+    <dd>
+      An array with <i>n</i> strings identifying the subscription plans
+      available to academic customers.
+    </dd>
+    <dt>billing_intervals</dt>
+    <dd>
+      A sorted array of <i>n</i> numbers. Each entry is an integer giving the
+      number of months between payments. For example, with <i>n</i> = 2, the
+      array [1,12] means there are two subscription plans, one involving monthly
+      payments, the other yearly payments.
+    </dd>
+    <dt>first_academic_user_amounts</dt>
+    <dd>
+      An array with <i>n</i> numbers. Each entry is an integer giving the price
+      in 1/100 of the specified currency to be paid on subscription creation or
+      renewal <strong>for the first seat</strong>. For example, with <i>n</i> =
+      2, currency = EUR, and billing intervals [1,12], the array [45000,180000]
+      means that the price for the first academic user is &euro;450 monthly or
+      &euro;1800 yearly. Entry <i>i</i> in
+      <code>first_academic_user_amounts</code> thus corresponds to entry
+      <i>i</i> in <code>billing_intervals</code>.
+    </dd>
+    <dt>next_academic_user_amounts</dt>
+    <dd>
+      null, if the Product does not support group subscriptions. Otherwise, an
+      array with <i>n</i> numbers. Each entry is an integer giving the price in
+      1/100 of the specified currency to be paid on subscription creation or
+      renewal <strong>for each additional seat</strong>. For example, with
+      <i>n</i> = 2, currency = EUR, and billing intervals [1,12], the array
+      [13500,54000] means that the price for each additional academic user is
+      &euro;135 monthly or &euro;540 yearly. Entry <i>i</i> in
+      <code>next_academic_user_amounts</code> thus corresponds to entry
+      <i>i</i> in <code>billing_intervals</code>.
+    </dd>
+    <dt>commercial_plan_ids</dt>
+    <dd>
+      As above, but for commercial customers.
+    </dd>
+    <dt>first_commercial_user_amounts</dt>
+    <dd>
+      As above, but for commercial customers.
+    </dd>
+    <dt>next_commercial_user_amounts</dt>
+    <dd>
+      As above, but for commercial customers.
+    </dd>
+  </dl>
+
+  <h2>Example</h2>
+
+  <p>
+    With the current response from the backend, display something like the boxed
+    example below on the pricing page. Feel free to rearrange things and make it
+    look better. Perhaps you want a different control for product selection so
+    that you can show all feature lists side by side for easier comparison?
+  </p>
+  <p>
+    The example shows the price calculated for the current choices: academic
+    customer, the JADBIO Group Premium product, yearly payment, three seats. The
+    first seat costs &euro;1800, each of the two additional seats costs
+    &euro;540 for a total of &euro;2880 yearly.
+  </p>
+  <p>
+    The example does not actually use the backend response, nor does it
+    dynamically refresh the features list, enable/disable the seats control, or
+    recalculate the price when the user changes their choices. That is your job.
+    Good luck.
+  </p>
+  <div class="example">
+    <div class="control">
+      Customer type:
+      <select>
+        <option selected>Academic</option>
+        <option>Commercial</option>
+      </select>
+    </div>
+    <div class="control">
+      Product:
+      <select>
+        <option>JADBIO Solo</option>
+        <option>JADBIO Solo Premium</option>
+        <option selected>JADBIO Group Premium</option>
+      </select>
+      <ul>
+        <li>6 CPU cores</li>
+        <li>6 GB storage</li>
+        <li>Direct API access</li>
+        <li>Model export</li>
+        <li>Extensive analysis</li>
+        <li>Platinum support</li>
+      </ul>
+    </div>
+    <div class="control">
+      Billing interval in months:
+      <select>
+        <option>1</option>
+        <option selected>12</option>
+      </select>
+    </div>
+    <div class="control">
+      Seats: <input type="number" min="1" max="20" value="3" />
+    </div>
+    Price: EUR2880
+  </div>
+</div>

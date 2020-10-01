@@ -1,0 +1,19 @@
+div.container {
+  max-width: 40em;
+  padding: 0 1em 1em 1em;
+  margin: auto;
+}
+
+dt {
+  margin-top: 1em;
+  font-family: monospace;
+}
+
+div.example {
+  border: 1px solid black;
+  padding: 1em;
+}
+
+div.control {
+  margin-bottom: 1em;
+}
