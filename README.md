@@ -1,6 +1,6 @@
 # Gnosis Interview Frontend Code Challenge
 
-Please don't fork this repository to anywhere public.
+Please don't put your solution anywhere public.
 
 The challenge assumes you have the Angular CLI installed
 on your machine in version 10.1.4 or something compatible
